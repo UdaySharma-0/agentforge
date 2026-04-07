@@ -7,7 +7,7 @@ pydantic==2.12.5
 pymongo==4.16.0
 PyPDF2==3.0.1
 python_docx==1.2.0
-Requests==2.33.1
+requests==2.33.1
 sentence_transformers==5.2.2
 tqdm==4.67.3
 twilio==9.10.0
