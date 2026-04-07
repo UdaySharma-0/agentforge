@@ -1,0 +1,89 @@
+/* Base resets for a modern SaaS look */
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom selection color to match your Indigo theme */
+::selection {
+  background-color: rgba(99, 102, 241, 0.3);
+  color: #818cf8;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Custom Modern Scrollbar - Dark Mode focused */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 20px;
+}
+
+/* Dark mode scrollbar - matches your sidebar background */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.4); /* Indigo glow on hover */
+}
+
+/* Utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Animation for the background glow in your Hero section */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1) translate(-50%, 0); }
+  50% { opacity: 0.8; transform: scale(1.1) translate(-50%, 20px); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 8s ease-in-out infinite;
+}
+
+/* Fix for the sidebar panel inner scrolling from your screenshot */
+#app-sidebar-panel > div {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE */
+}
+
+#app-sidebar-panel > div::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}

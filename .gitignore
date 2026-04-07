@@ -1,0 +1,30 @@
+# ===== Secrets =====
+.env
+.env.*
+
+# ===== Node =====
+node_modules/
+npm-debug.log*
+
+# ===== Python =====
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+tests/
+
+# ===== Runtime / uploads =====
+uploads/
+chat_logs.json
+
+# ===== OS / Editor =====
+.vscode/
+.DS_Store
+Thumbs.db
+
+PROMPTS
+COHERE_MIGRATION_README.md
+COHERE_MIGRATION_FINAL_SUMMARY.md
+
+

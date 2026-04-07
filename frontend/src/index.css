@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@theme {
+  --color-primary: #6366f1;
+  --color-bg: var(--color-bg);
+  --color-card: var(--color-card);
+  --color-border: var(--color-border);
+  --color-text: var(--color-text);
+  --color-muted: var(--color-muted);
+}
+
+:root {
+  --color-bg: #020617;
+  --color-card: #0f172a; /* Solid color is faster than translucent */
+  --color-border: #1e293b;
+  --color-text: #f8fafc;
+  --color-muted: #94a3b8;
+}
+
+[data-theme="light"] {
+  --color-bg: #f8fafc;
+  --color-card: #ffffff;
+  --color-border: #e2e8f0;
+  --color-text: #0f172a;
+  --color-muted: #64748b;
+}
+
+/* PERFORMANCE FIX: Removed Backdrop-blur and Noise SVG */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  /* Use a static gradient instead of multiple radial blur divs */
+  background-image: radial-gradient(at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* High Performance Card */
+.feature-card {
+  @apply rounded-2xl border p-8 transition-all duration-300 ease-out;
+  background-color: var(--color-card);
+  border-color: var(--color-border);
+}
+
+/* Only use transform on hover, avoid filters like blur or brightness here */
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.vercel-card {
+  @apply rounded-md border border-white/10 bg-slate-950/50 backdrop-blur-sm transition-colors;
+}
+
+.vercel-card:hover {
+  @apply border-white/20 bg-slate-950/80;
+}
