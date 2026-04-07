@@ -10,7 +10,7 @@ pymongo==4.16.0
 
 # LLM & Embeddings
 groq==1.0.0
-cohere==5.5.3
+cohere==5.21.1
 
 # Optional: Local Embeddings (Development Only)
 # Set USE_LOCAL_EMBEDDING=true in environment to enable
