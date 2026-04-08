@@ -1,4 +1,0 @@
-# Monorepo compatibility shim.
-# If a platform installs from the repo root by mistake, defer to the
-# production-safe AI service requirements instead of the local ML stack.
--r ai-agent-service/requirements.txt
