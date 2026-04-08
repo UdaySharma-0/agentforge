@@ -2,7 +2,7 @@
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
     "builder": "RAILPACK",
-    "buildCommand": "pip install -r requirements.txt && python -m nltk.downloader -d ./nltk_data wordnet omw-1.4"
+    "buildCommand": "python -m nltk.downloader -d ./nltk_data wordnet omw-1.4"
   },
   "deploy": {
     "runtime": "V2",
