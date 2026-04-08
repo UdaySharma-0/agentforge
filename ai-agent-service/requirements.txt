@@ -36,4 +36,3 @@ charset-normalizer==3.4.1
 idna==3.10
 urllib3==2.6.3
 nltk==3.9.4
-twilio==9.10.0

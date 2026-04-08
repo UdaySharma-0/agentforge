@@ -6,7 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from .api.run_agent import router as agent_router
 from .api.manual_text import router as manual_text_router
 from .api.knowledge_listing import router as knowledge_listing_router
-from .whatsapp.webhook import router as whatsapp_router
 from app.api.scrape_website import router as scrape_router
 from app.api.upload_doc import router as upload_router
 
@@ -38,7 +37,6 @@ app.add_middleware(
 app.include_router(agent_router, prefix="/api")
 app.include_router(manual_text_router, prefix="/api")
 app.include_router(knowledge_listing_router, prefix="/api")
-app.include_router(whatsapp_router, prefix="/whatsapp")
 app.include_router(upload_router, prefix="/api")
 app.include_router(scrape_router, prefix="/api")
 
