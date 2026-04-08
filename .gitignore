@@ -31,3 +31,5 @@ COHERE_MIGRATION_FINAL_SUMMARY.md
 .env
 .env.*
 tests/
+
+requirements.local.txt

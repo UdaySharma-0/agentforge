@@ -8,10 +8,18 @@ from app.config import ENABLE_RERANKER, RERANK_TOP_K
 from app.knowledge.query_rewriter import rewrite_query
 from app.knowledge.retriever import fetch_relevant_chunks
 from app.llm.groq_client import groq_answer
+from app.utils.nltk_setup import ensure_nltk_resources
 from app.utils.reranker import rerank_docs
 
 
 logger = logging.getLogger(__name__)
+WORDNET_AVAILABLE = True
+try:
+    ensure_nltk_resources(download_if_missing=os.getenv("NLTK_AUTO_DOWNLOAD", "true").lower() in {"1", "true", "yes", "on"})
+except Exception as exc:
+    WORDNET_AVAILABLE = False
+    logger.warning("WordNet data unavailable. Falling back to raw terms. Error: %s", exc)
+
 lemmatizer = WordNetLemmatizer()
 
 # ---------------------------------------------------------------------------
@@ -280,8 +288,8 @@ def meaningful_terms(text: str) -> set:
     terms = set()
     for term in normalized.split():
         if len(term) > 2 and term not in STOPWORDS:
-            # Use NLTK lemmatizer for accurate singularization
-            lemmatized_term = lemmatizer.lemmatize(term)
+            # Prefer WordNet-based singularization, but keep search alive without the corpus.
+            lemmatized_term = lemmatizer.lemmatize(term) if WORDNET_AVAILABLE else term
             terms.add(lemmatized_term)
     return terms
 

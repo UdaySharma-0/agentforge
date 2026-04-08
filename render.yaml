@@ -3,7 +3,7 @@ services:
     name: ai-agent-service
     runtime: python
     rootDir: ai-agent-service
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && python -m nltk.downloader -d ./nltk_data wordnet omw-1.4
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
 
 environment:
