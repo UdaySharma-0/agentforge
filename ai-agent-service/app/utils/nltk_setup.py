@@ -12,12 +12,23 @@ REQUIRED_RESOURCES = ("wordnet", "omw-1.4")
 
 
 def configure_nltk_data_path() -> Path:
-    data_dir = Path(os.getenv("NLTK_DATA", str(NLTK_DATA_DIR))).resolve()
+    configured_path = os.getenv("NLTK_DATA")
+    candidate_dirs = []
+
+    if configured_path:
+        candidate_dirs.append(Path(configured_path))
+
+    candidate_dirs.append(Path.cwd() / "nltk_data")
+    candidate_dirs.append(NLTK_DATA_DIR)
+
+    data_dir = candidate_dirs[0].resolve()
     data_dir.mkdir(parents=True, exist_ok=True)
 
-    data_dir_str = str(data_dir)
-    if data_dir_str not in nltk.data.path:
-        nltk.data.path.insert(0, data_dir_str)
+    for candidate in candidate_dirs:
+        candidate_path = candidate.resolve()
+        candidate_str = str(candidate_path)
+        if candidate_str not in nltk.data.path:
+            nltk.data.path.insert(0, candidate_str)
 
     return data_dir
 

@@ -2,11 +2,11 @@
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
     "builder": "RAILPACK",
-    "buildCommand": "python -m nltk.downloader -d ./nltk_data wordnet omw-1.4"
+    "buildCommand": ".venv/bin/python -m nltk.downloader -d ai-agent-service/nltk_data wordnet omw-1.4"
   },
   "deploy": {
     "runtime": "V2",
-    "startCommand": "uvicorn app.main:app --host 0.0.0.0 --port $PORT",
+    "startCommand": "PYTHONPATH=ai-agent-service NLTK_DATA=ai-agent-service/nltk_data .venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT",
     "healthcheckPath": "/"
   }
 }
