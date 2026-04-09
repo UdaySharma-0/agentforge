@@ -19,6 +19,7 @@ const emailRoutes = require("./routes/email.routes");
 
 
 const app = express();
+app.set("trust proxy", 1);
 const DEFAULT_WHATSAPP_REDIRECT_URI = "http://localhost:5173/auth/whatsapp";
 
 // 🔹 Connect Database

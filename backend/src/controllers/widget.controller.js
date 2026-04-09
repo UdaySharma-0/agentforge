@@ -10,8 +10,16 @@ const {
   sanitizeGreetingLines,
 } = require("../utils/widgetSecurity");
 
+function getPublicBaseUrl(req) {
+  return (
+    process.env.PUBLIC_BASE_URL ||
+    process.env.BACKEND_BASE_URL ||
+    `${req.protocol}://${req.get("host")}`
+  );
+}
+
 function buildPublicScriptUrl(req, agentId) {
-  return `${req.protocol}://${req.get("host")}/widget.js?agentId=${agentId}&v=1`;
+  return `${getPublicBaseUrl(req)}/widget.js?agentId=${agentId}&v=1`;
 }
 
 function getAllowedWidgetStatuses() {
@@ -331,7 +339,7 @@ exports.serveWidgetLoader = async (req, res) => {
         );
     }
 
-    const apiBase = `${req.protocol}://${req.get("host")}`;
+    const apiBase = getPublicBaseUrl(req);
     const script = `
 (function () {
   var scriptTag = document.currentScript;
@@ -804,7 +812,7 @@ exports.serveChatUi = async (req, res) => {
           addMessage(message, "user");
           inputEl.value = "";
 
-          fetch(${escapeForJs(`${req.protocol}://${req.get("host")}/api/widget/chat`)}, {
+          fetch(${escapeForJs(`${getPublicBaseUrl(req)}/api/widget/chat`)}, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
