@@ -30,7 +30,50 @@ router.get("/dashboard", auth, admin, async (req, res) => {
 // 🔹 All Users
 router.get("/users", auth, admin, async (req, res) => {
   const users = await User.find().select("-password");
-  res.json({ success: true, users });
+res.json({ success: true, users });
+});
+
+router.patch("/users/:id/role", auth, admin, async (req, res) => {
+  try {
+    const { role } = req.body;
+
+    if (!["user", "admin"].includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: "Role must be either user or admin",
+      });
+    }
+
+    if (req.user.id === req.params.id && role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "You cannot remove your own admin access",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { role },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 });
 
 // 🔹 All Logs

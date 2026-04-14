@@ -135,10 +135,11 @@ export function getMetaOAuthUrl() {
 }
 
 export function getGoogleOAuthUrl() {
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const redirectUri =
+  const clientId = import.meta.env.VITE_GOOGLE_GMAIL_CLIENT_ID?.trim();
+  const redirectUri = (
     import.meta.env.VITE_GMAIL_CALLBACK_URL ||
-    `${window.location.origin}/auth/gmail`;
+    `${window.location.origin}/auth/gmail`
+  ).trim();
   const scopes = [
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/gmail.send",
@@ -147,7 +148,7 @@ export function getGoogleOAuthUrl() {
 
   if (!clientId || !redirectUri) {
     console.error(
-      "Missing VITE_GOOGLE_CLIENT_ID or VITE_GMAIL_CALLBACK_URL environment variables"
+      "Missing VITE_GOOGLE_GMAIL_CLIENT_ID or VITE_GMAIL_CALLBACK_URL environment variables"
     );
     return null;
   }

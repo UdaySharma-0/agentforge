@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpenText,
@@ -15,12 +15,13 @@ import {
   X,
   ChevronRight,
   ShieldCheck,
+  LayoutDashboard,
 } from "lucide-react";
 import { useToast } from "../ui/ToastProvider";
 import { performLogout } from "../../utils/logout";
 import { cn } from "./../ui/utils"; 
 
-const ACTIVITY_ITEMS = [
+const BASE_ACTIVITY_ITEMS = [
   { id: "dashboard", label: "Dashboard", to: "/dashboard", icon: ChartColumnBig },
   { id: "agents", label: "Agents", to: "/agents", icon: Bot },
   { id: "knowledge", label: "Knowledge Base", to: "/agents/knowledge", icon: BookOpenText },
@@ -39,11 +40,12 @@ function matchActiveItem(pathname) {
   if (pathname.startsWith("/logs")) return "logs";
   if (pathname.startsWith("/settings")) return "settings";
   if (pathname.startsWith("/channels")) return "channels";
+  if (pathname.startsWith("/admin")) return "admin";
   if (pathname.startsWith("/dashboard")) return "dashboard";
   return null;
 }
 
-function MainNavList({ onNavigate }) {
+function MainNavList({ onNavigate, isAdmin }) {
   const groups = [
     {
       title: "Main",
@@ -67,6 +69,9 @@ function MainNavList({ onNavigate }) {
       links: [
         { label: "Documentation", to: "/docs", icon: BookOpenText },
         { label: "Settings", to: "/settings", icon: Settings },
+        ...(isAdmin
+          ? [{ label: "Admin Panel", to: "/admin", icon: LayoutDashboard }]
+          : []),
       ],
     },
   ];
@@ -143,12 +148,21 @@ export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const { showToast } = useToast();
 
   const routeActive = useMemo(() => matchActiveItem(location.pathname), [location.pathname]);
   const [active, setActive] = useState(routeActive);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isLogoutRippling, setIsLogoutRippling] = useState(false);
+  const isAdmin = user?.role === "admin";
+  const activityItems = useMemo(
+    () =>
+      isAdmin
+        ? [...BASE_ACTIVITY_ITEMS, { id: "admin", label: "Admin Panel", to: "/admin", icon: LayoutDashboard }]
+        : BASE_ACTIVITY_ITEMS,
+    [isAdmin],
+  );
 
   useEffect(() => { if (routeActive) setActive(routeActive); }, [routeActive]);
 
@@ -165,7 +179,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const onActivityClick = (id) => {
     if (active === id) { setActive(null); onClose?.(); return; }
     setActive(id);
-    const item = ACTIVITY_ITEMS.find((x) => x.id === id);
+    const item = activityItems.find((x) => x.id === id);
     if (item?.to) navigate(item.to);
   };
 
@@ -191,7 +205,7 @@ export default function Sidebar({ isOpen, onClose }) {
             <Bot size={22} className="text-white" />
           </div>
           <nav className="flex w-full flex-1 flex-col gap-2 px-2">
-            {ACTIVITY_ITEMS.map((item) => {
+            {activityItems.map((item) => {
               const Icon = item.icon;
               const isSelected = active === item.id;
               return (
@@ -224,7 +238,7 @@ export default function Sidebar({ isOpen, onClose }) {
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 dark:border-slate-800/60 px-6">
               <div className="min-w-0">
                 <p className="text-xs font-bold uppercase tracking-widest text-indigo-500 dark:text-indigo-400">
-                  {ACTIVITY_ITEMS.find(i => i.id === active)?.label || "Navigation"}
+                  {activityItems.find(i => i.id === active)?.label || "Navigation"}
                 </p>
                 <p className="text-[11px] font-medium text-slate-600 dark:text-slate-500">Agent Forge</p>
               </div>
@@ -233,7 +247,7 @@ export default function Sidebar({ isOpen, onClose }) {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto no-scrollbar">
-              <MainNavList onNavigate={() => onClose?.()} />
+              <MainNavList onNavigate={() => onClose?.()} isAdmin={isAdmin} />
             </div>
             <div className="border-t border-slate-200 dark:border-slate-800/60 p-4 bg-slate-50 dark:bg-slate-900/50">
               <div className="mb-4 rounded-xl bg-indigo-100 dark:bg-indigo-500/5 p-3 border border-indigo-300 dark:border-indigo-500/10">

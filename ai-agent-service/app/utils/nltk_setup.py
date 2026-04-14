@@ -38,7 +38,10 @@ def ensure_nltk_resources(download_if_missing: bool = False) -> Path:
 
     for resource in REQUIRED_RESOURCES:
         try:
-            nltk.data.find(f"corpora/{resource}")
+            try:
+                nltk.data.find(f"corpora/{resource}")
+            except LookupError:
+                nltk.data.find(f"corpora/{resource}.zip")
         except LookupError:
             if not download_if_missing:
                 raise

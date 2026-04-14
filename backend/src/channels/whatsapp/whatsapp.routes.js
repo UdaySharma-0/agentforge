@@ -3,6 +3,7 @@ const router = express.Router();
 const webhookController = require("./webhook.controller");
 const auth = require("../../middlewares/auth.middleware");
 const WhatsAppIntegration = require("../../models/WhatsAppIntegration");
+const { syncAgentStatus } = require("../../utils/agentStatusSync");
 const { encryptToken, decryptToken } = require("../../utils/tokenEncryption");
 
 // ============================================
@@ -159,6 +160,7 @@ router.post("/integrations", auth, async (req, res) => {
 
     // Populate agent for response
     await integration.populate("agentId", "name");
+    await syncAgentStatus({ agentId, userId: businessId });
 
     return res.json({
       success: true,
@@ -217,6 +219,11 @@ router.delete("/integrations/:integrationId", auth, async (req, res) => {
       { isActive: false },
       { new: true }
     );
+
+    await syncAgentStatus({
+      agentId: integration.agentId,
+      userId: businessId,
+    });
 
     console.log(
       `[WhatsAppRoutes] Disabled integration: ${integration.phone_number_id}`

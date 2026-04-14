@@ -90,26 +90,49 @@ export default function Features() {
           </div>
 
           {/* Integration Status Grid */}
-          <div className="rounded-[2.5rem] bg-indigo-500/5 border border-indigo-500/10 p-8 md:p-12">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-              <div className="max-w-md text-center md:text-left">
-                <h3 className="text-2xl font-black tracking-tight mb-2">
+          <div className="rounded-[2.5rem] bg-indigo-500/5 border border-indigo-500/10 p-8 md:p-12 relative overflow-hidden group">
+            {/* Subtle Background Glow */}
+            <div className="absolute -top-24 -right-24 h-48 w-48 bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
+
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-10 relative z-10">
+              {/* Text Content */}
+              <div className="max-w-md text-center lg:text-left">
+                <h3 className="text-2xl md:text-3xl font-black tracking-tight text-white mb-3">
                   Multi-Channel Deployment
                 </h3>
-                <p className="text-sm text-[var(--color-muted)] font-medium">
+                <p className="text-sm md:text-base text-[var(--color-muted)] font-medium leading-relaxed">
                   Authorise and deploy your unit to any channel in one click. We
                   handle the infrastructure, you handle the growth.
                 </p>
               </div>
-              <div className="grid grid-cols-2 gap-3 w-full md:w-auto">
+
+              {/* Channels Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full lg:w-[480px]">
                 {deploymentChannels.map((channel) => (
                   <div
                     key={channel.name}
-                    className="flex items-center justify-between gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"
+                    className="flex items-center justify-between gap-4 rounded-xl border border-white/5 bg-black/20 p-4 transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
                   >
-                    <span className="text-xs font-bold">{channel.name}</span>
+                    <div className="flex items-center gap-2.5">
+                      {/* Status Dot */}
+                      <div
+                        className={`h-1.5 w-1.5 rounded-full shadow-[0_0_8px] ${
+                          channel.status === "Available"
+                            ? "bg-emerald-500 shadow-emerald-500/50"
+                            : "bg-white/20 shadow-transparent"
+                        }`}
+                      />
+                      <span className="text-xs font-bold text-gray-200 tracking-wide">
+                        {channel.name}
+                      </span>
+                    </div>
+
                     <span
-                      className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${channel.status === "Available" ? "bg-emerald-500/10 text-emerald-500" : "bg-white/5 text-white/30"}`}
+                      className={`text-[9px] font-black uppercase px-2.5 py-1 rounded-md tracking-tighter border ${
+                        channel.status === "Available"
+                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+                          : "bg-white/5 border-white/10 text-white/30"
+                      }`}
                     >
                       {channel.status}
                     </span>
@@ -122,7 +145,7 @@ export default function Features() {
       </section>
 
       {/* Roadmap Highlight */}
-      <section className="px-6 py-20 text-center">
+      <section className="px-6 py-10 text-center">
         <div className="mx-auto max-w-xl rounded-3xl border border-dashed border-[var(--color-border)] p-10">
           <Zap className="mx-auto mb-4 text-indigo-500 opacity-50" size={32} />
           <h3 className="text-lg font-bold mb-2">Visual Workflow Editor</h3>

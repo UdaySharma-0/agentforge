@@ -2,6 +2,21 @@ const Workflow = require("../models/Workflow");
 const Agent = require("../models/Agent");
 const { executeWorkflow } = require("../services/workflowEngine");
 
+async function ensureOwnedAgent(agentId, userId) {
+  const agent = await Agent.findOne({
+    _id: agentId,
+    createdBy: userId,
+  });
+
+  if (!agent) {
+    const error = new Error("Agent not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return agent;
+}
+
 // 🔹 CREATE / SAVE WORKFLOW
 exports.createWorkflow = async (req, res) => {
   try {
@@ -56,6 +71,8 @@ exports.createWorkflow = async (req, res) => {
 // 🔹 GET WORKFLOW BY AGENT
 exports.getWorkflowByAgent = async (req, res) => {
   try {
+    await ensureOwnedAgent(req.params.agentId, req.user.id);
+
     const workflow = await Workflow.findOne({
       agentId: req.params.agentId,
       isActive: true,
@@ -66,7 +83,7 @@ exports.getWorkflowByAgent = async (req, res) => {
       workflow,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -75,6 +92,8 @@ exports.runWorkflow = async (req, res) => {
   try {
     const { input } = req.body;
     const channel = req.body.channel || req.query.channel || "chatbot";
+
+    await ensureOwnedAgent(req.params.agentId, req.user.id);
 
     const workflow = await Workflow.findOne({
       agentId: req.params.agentId,
@@ -97,6 +116,6 @@ exports.runWorkflow = async (req, res) => {
       result,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };

@@ -2,6 +2,7 @@ const axios = require("axios");
 const env = require("../config/env");
 const Agent = require("../models/Agent");
 const EmailIntegration = require("../models/EmailIntegration");
+const { syncAgentStatus } = require("../utils/agentStatusSync");
 const { encryptToken } = require("../utils/tokenEncryption");
 
 async function exchangeGmailCode(req, res) {
@@ -120,6 +121,8 @@ async function exchangeGmailCode(req, res) {
         setDefaultsOnInsert: true,
       },
     );
+
+    await syncAgentStatus({ agentId, userId });
 
     return res.json({
       success: true,

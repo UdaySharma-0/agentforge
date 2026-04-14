@@ -27,10 +27,16 @@ import SettingsPage from "./pages/settings/SettingsPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/Users";
+import AdminAgents from "./pages/admin/Agents";
+import AdminAnalytics from "./pages/admin/Analytics";
 
 // Layout & Core
 import Layout from "./components/layout/layout";
 import PrivateRoute from "./components/routes/PrivateRoute";
+import AdminRoute from "./components/admin/AdminRoute";
+import AdminLayout from "./components/admin/AdminLayout";
 import { restoreAuth } from "./app/authSlice";
 import { Spinner } from "./components/ui";
 import { Bot } from "lucide-react";
@@ -76,6 +82,14 @@ export default function App() {
     <PrivateRoute>
       <Layout>{component}</Layout>
     </PrivateRoute>
+  );
+
+  const adminProtectedLayout = (component) => (
+    <AdminRoute>
+      <Layout>
+        <AdminLayout>{component}</AdminLayout>
+      </Layout>
+    </AdminRoute>
   );
 
   return (
@@ -159,6 +173,11 @@ export default function App() {
         path="/channels/:id"
         element={protectedLayout(<ChannelsIntegration />)}
       />
+
+      <Route path="/admin" element={adminProtectedLayout(<AdminDashboard />)} />
+      <Route path="/admin/users" element={adminProtectedLayout(<AdminUsers />)} />
+      <Route path="/admin/agents" element={adminProtectedLayout(<AdminAgents />)} />
+      <Route path="/admin/analytics" element={adminProtectedLayout(<AdminAnalytics />)} />
     </Routes>
   );
 }

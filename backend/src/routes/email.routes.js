@@ -1,6 +1,7 @@
 const express = require("express");
 const auth = require("../middlewares/auth.middleware");
 const EmailIntegration = require("../models/EmailIntegration");
+const { syncAgentStatus } = require("../utils/agentStatusSync");
 
 const router = express.Router();
 
@@ -61,6 +62,11 @@ router.delete("/integrations/:integrationId", auth, async (req, res) => {
       { isActive: false },
       { new: true },
     );
+
+    await syncAgentStatus({
+      agentId: integration.agentId,
+      userId: businessId,
+    });
 
     return res.json({
       success: true,

@@ -25,6 +25,7 @@ import {
   Cpu,
   Activity,
   Globe,
+  ChevronRight,
 } from "lucide-react";
 
 function statusVariant(status) {
@@ -176,58 +177,69 @@ export default function AgentDetails() {
             </CardContent>
           </Card>
 
-          {/* Quick Config Links as Tiles */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <button
-              onClick={() => navigate(`/agents/${id}/knowledge`)}
-              className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[var(--color-card)]/50 p-6 transition-all hover:-translate-y-1 hover:border-blue-500/40 hover:bg-blue-500/5"
-            >
-              <div className="rounded-xl bg-blue-500/10 p-3 text-blue-400 group-hover:scale-110 transition-transform">
-                <BookOpen className="h-6 w-6" />
-              </div>
-              <div className="text-center">
-                <div className="text-sm font-black uppercase tracking-wider text-[var(--color-text)]">
-                  Knowledge
-                </div>
-                <div className="text-[10px] font-medium text-[var(--color-muted)] uppercase tracking-tight">
-                  Train on data
-                </div>
-              </div>
-            </button>
-            <button
-              onClick={() => navigate(`/agents/${id}/behavior`)}
-              className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[var(--color-card)]/50 p-6 transition-all hover:-translate-y-1 hover:border-indigo-500/40 hover:bg-indigo-500/5"
-            >
-              <div className="rounded-xl bg-indigo-500/10 p-3 text-indigo-400 group-hover:scale-110 transition-transform">
-                <Settings2 className="h-6 w-6" />
-              </div>
-              <div className="text-center">
-                <div className="text-sm font-black uppercase tracking-wider text-[var(--color-text)]">
-                  Behavior
-                </div>
-                <div className="text-[10px] font-medium text-[var(--color-muted)] uppercase tracking-tight">
-                  Fine-tune tone
-                </div>
-              </div>
-            </button>
-            <button
-              onClick={() => navigate(`/agents/${id}/test`)}
-              className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-primary/30 bg-primary/10 p-6 transition-all hover:-translate-y-1 hover:border-primary hover:shadow-lg hover:shadow-primary/10"
-            >
-              <div className="rounded-xl bg-primary/20 p-3 text-primary group-hover:animate-pulse">
-                <MessageSquare className="h-6 w-6" />
-              </div>
-              <div className="text-center">
-                <div className="text-sm font-black uppercase tracking-wider text-primary">
-                  Test Lab
-                </div>
-                <div className="text-[10px] font-medium text-primary/70 uppercase tracking-tight">
-                  Live debugging
-                </div>
-              </div>
-            </button>
-          </div>
-        </div>
+
+
+{/* Agent Configuration Actions */}
+<div className="flex flex-col gap-3 p-4 w-full max-w-md mx-auto">
+  
+  {/* Knowledge Action */}
+  <Button
+    variant="secondary"
+    size="lg"
+    className="w-full justify-between group h-auto py-4 px-5"
+    onClick={() => navigate(`/agents/${id}/knowledge`)}
+    leftIcon={
+      <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:bg-blue-500/20">
+        <BookOpen size={20} />
+      </div>
+    }
+    rightIcon={<ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />}
+  >
+    <div className="flex flex-col items-start gap-0.5">
+      <span className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">Knowledge Base</span>
+      <span className="text-[11px] font-medium text-slate-500 lowercase first-letter:uppercase">Source data & documents</span>
+    </div>
+  </Button>
+
+  {/* Behavior Action */}
+  <Button
+    variant="secondary"
+    size="lg"
+    className="w-full justify-between group h-auto py-4 px-5"
+    onClick={() => navigate(`/agents/${id}/behavior`)}
+    leftIcon={
+      <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:bg-indigo-500/20">
+        <Settings2 size={20} />
+      </div>
+    }
+    rightIcon={<ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />}
+  >
+    <div className="flex flex-col items-start gap-0.5">
+      <span className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">Behavior Settings</span>
+      <span className="text-[11px] font-medium text-slate-500 lowercase first-letter:uppercase">Tone & personality prompt</span>
+    </div>
+  </Button>
+
+  {/* Test Lab - Primary Action */}
+  <Button
+    variant="primary"
+    size="lg"
+    className="w-full justify-between group h-auto py-5 px-5 mt-2 shadow-lg shadow-indigo-500/20"
+    onClick={() => navigate(`/agents/${id}/test`)}
+    leftIcon={
+      <div className="p-2 rounded-lg bg-white/20 text-white">
+        <MessageSquare size={20} />
+      </div>
+    }
+    rightIcon={<ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />}
+  >
+    <div className="flex flex-col items-start gap-0.5">
+      <span className="text-sm font-black uppercase tracking-widest">Launch Test Lab</span>
+      <span className="text-[11px] font-medium text-indigo-100">Debug and chat with agent</span>
+    </div>
+  </Button>
+
+</div>       </div>
 
         {/* Right Side: Status & Launch */}
         <div className="space-y-6">

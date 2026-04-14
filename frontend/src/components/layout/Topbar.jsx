@@ -14,6 +14,10 @@ const titleByPath = {
   "/logs": "Logs",
   "/docs": "Documentation",
   "/settings": "Settings",
+  "/admin": "Admin Panel",
+  "/admin/users": "Admin Users",
+  "/admin/agents": "Admin Agents",
+  "/admin/analytics": "Admin Analytics",
 };
 
 function titleFromPath(pathname) {

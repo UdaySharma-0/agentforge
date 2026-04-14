@@ -1,6 +1,7 @@
 const Agent = require("../models/Agent");
 const WidgetConfig = require("../models/WidgetConfig");
 const { executeAgentChat } = require("../services/chatRuntime");
+const { syncAgentStatus } = require("../utils/agentStatusSync");
 const {
   colorsAreValid,
   getOriginFromRequest,
@@ -203,6 +204,8 @@ exports.saveWidgetConfig = async (req, res) => {
       },
     );
 
+    await syncAgentStatus({ agentId, userId });
+
     return res.json({
       success: true,
       config: serializeWidgetConfig(config, req),
@@ -240,6 +243,8 @@ exports.deleteWidgetConfig = async (req, res) => {
         message: "Widget config not found",
       });
     }
+
+    await syncAgentStatus({ agentId, userId });
 
     return res.json({
       success: true,
